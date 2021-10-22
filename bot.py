@@ -1,15 +1,16 @@
 import sqlite3
-from os.path import exists
+from os.path import exists, dirname, join
 
 from nextcord.ext import commands
 
 from configuration import config
 
 bot = commands.Bot(description='Ballista Bot!', command_prefix='!', case_insensitive=True, self_bot=False)
+dir = dirname(__file__)
 
 
 def initialize_db() -> sqlite3.Connection:
-    conn = sqlite3.connect('ballista.db')
+    conn = sqlite3.connect(join(dir, 'ballista.db'))
     cur = conn.cursor()
     cur.execute(
         '''CREATE TABLE ballista_report (entry_start INTEGER, 
