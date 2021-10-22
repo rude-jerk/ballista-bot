@@ -57,7 +57,7 @@ class BallistaSchedule(commands.Cog):
                                 users.add(user)
                     if len(users) > 0:
                         message = f'Reminder: `{match["zone"]["name"]}` `{match["team1"]["name"]} vs ' \
-                                  f'{match["team2"]["name"]}` `Cap: {match["levelCap"]}` <t:{match["start"]}:R>\n'
+                                  f'{match["team2"]["name"]}` `Cap: {match["levelCap"]}` Entry <t:{match["entryStart"]}:R>\n'
                         for user in users:
                             message += f'<@{user.id}>'
                         reminder = await self.bot.schedule_channel.send(message)
