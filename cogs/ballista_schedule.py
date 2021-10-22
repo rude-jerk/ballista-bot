@@ -1,5 +1,3 @@
-from time import time
-
 from nextcord import Embed, Colour as Color
 from nextcord.ext import commands, tasks
 
@@ -65,10 +63,18 @@ class BallistaSchedule(commands.Cog):
 
                     update_ballista_entry(self.bot.conn, match, sent_notification)
 
+    @tasks.loop(minutes=1)
+    async def reminder_cleanup(self):
+        reminders = get_old_reminders(self.bot.conn)
+        for reminder in reminders:
+            reminder_message = await self.bot.schedule_channel.fetch_message(reminder.reminder)
+            await reminder_message.delete()
+
     @commands.Cog.listener()
     async def on_ready(self):
         self.announce_ballista.start()
         self.send_reminders.start()
+        self.reminder_cleanup.start()
 
 
 def setup(bot):

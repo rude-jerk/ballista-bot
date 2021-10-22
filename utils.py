@@ -1,5 +1,6 @@
 import sqlite3
 from collections import namedtuple
+from time import time
 
 BallistaNotification = namedtuple('BallistaNotification',
                                   ['recruitment_post', 'reminder'])
@@ -38,8 +39,6 @@ def get_ballista_entry(connection: sqlite3.Connection, match: dict) -> BallistaN
                       match['end'])
             )
             notification = BallistaNotification(0, 0)
-    except Exception as err:
-        print(err)
     finally:
         if cursor:
             connection.commit()
@@ -75,3 +74,29 @@ def update_ballista_entry(connection: sqlite3.Connection, match: dict, notificat
             cursor.close()
 
     return success
+
+
+def get_old_reminders(connection: sqlite3.Connection) -> list[BallistaNotification]:
+    cursor = None
+    reminders = []
+    cutoff_time = int(time())
+    try:
+        cursor = connection.cursor()
+        cursor.row_factory = notification_factory
+        cursor.execute(
+            '''
+            SELECT recruitment_post, reminder FROM ballista_report WHERE actual_end BETWEEN 1 AND ? AND reminder > 0
+            ''', (cutoff_time,)
+        )
+        reminders = cursor.fetchall()
+        cursor.execute(
+            '''
+            UPDATE ballista_report SET reminder = -1 WHERE actual_end BETWEEN 1 AND ? AND reminder > 0
+            ''', (cutoff_time,)
+        )
+    finally:
+        if cursor:
+            connection.commit()
+            cursor.close()
+
+    return reminders

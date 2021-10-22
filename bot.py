@@ -26,7 +26,7 @@ def initialize_db() -> sqlite3.Connection:
 
 @bot.event
 async def on_ready():
-    bot.conn = sqlite3.connect('ballista.db')
+    bot.conn = sqlite3.connect(join(dir, 'ballista.db'))
     bot.schedule_channel = bot.get_channel(config['SCHEDULE_CHANNEL'])
     if not bot.schedule_channel:
         print('ERROR: Could not locate schedule channel')
