@@ -63,7 +63,7 @@ class BallistaSchedule(commands.Cog):
 
                     update_ballista_entry(self.bot.conn, match, sent_notification)
 
-    @tasks.loop(minutes=1)
+    @tasks.loop(minutes=64)
     async def reminder_cleanup(self):
         reminders = get_old_reminders(self.bot.conn)
         for reminder in reminders:
