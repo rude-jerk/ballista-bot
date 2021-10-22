@@ -76,7 +76,7 @@ def update_ballista_entry(connection: sqlite3.Connection, match: dict, notificat
     return success
 
 
-def get_old_reminders(connection: sqlite3.Connection) -> list[BallistaNotification]:
+def get_old_reminders(connection: sqlite3.Connection) -> list:
     cursor = None
     reminders = []
     cutoff_time = int(time())
