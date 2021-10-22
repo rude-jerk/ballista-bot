@@ -43,7 +43,7 @@ async def on_message(message):
 
 
 if __name__ == '__main__':
-    if not exists('ballista.db'):
+    if not exists(join(dir, 'ballista.db')):
         conn = initialize_db()
         conn.close()
 
