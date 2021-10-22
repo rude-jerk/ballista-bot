@@ -1,4 +1,6 @@
-from nextcord import Embed, Colour as Color
+from random import choice
+
+from nextcord import Embed
 from nextcord.ext import commands, tasks
 
 from ballista_time import get_next_ballista_match
@@ -18,9 +20,10 @@ class BallistaSchedule(commands.Cog):
             if match['entryStart'] <= now + (12 * 3600):  # within 12 hours
                 notification = get_ballista_entry(self.bot.conn, match)
                 if notification.recruitment_post == 0:
+                    color = choice([match["team1"]["color"], match["team2"]["color"]])
                     recruitment_post = Embed(title=f'Ballista: {match["team1"]["name"]} vs {match["team2"]["name"]}'
                                                    f' <t:{match["start"]}:R>',
-                                             color=Color.orange())
+                                             color=color)
                     recruitment_post.add_field(name='Level Cap',
                                                value=f'{match["levelCap"] if match["levelCap"] > 0 else "Uncapped"}',
                                                inline=False)

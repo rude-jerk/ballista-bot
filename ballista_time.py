@@ -1,10 +1,11 @@
 from math import floor
 from time import time
+from nextcord import Colour as Color
 
 nations = {
-    'sandoria': {'name': 'San d\'Oria'},
-    'bastok': {'name': 'Bastok'},
-    'windurst': {'name': 'Windurst'}
+    'sandoria': {'name': 'San d\'Oria', 'color': Color.red()},
+    'bastok': {'name': 'Bastok', 'color': Color.blue()},
+    'windurst': {'name': 'Windurst', 'color': Color.green()}
 }
 
 zones = {
