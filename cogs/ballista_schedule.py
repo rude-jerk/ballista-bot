@@ -13,7 +13,7 @@ class BallistaSchedule(commands.Cog):
 
     @tasks.loop(minutes=31)
     async def announce_ballista(self):
-        matches = get_next_ballista_match(5, True)
+        matches = get_next_ballista_match(10, True)
         now = int(time())
 
         for match in matches:
@@ -42,7 +42,7 @@ class BallistaSchedule(commands.Cog):
 
     @tasks.loop(minutes=10)
     async def send_reminders(self):
-        matches = get_next_ballista_match(5, True)
+        matches = get_next_ballista_match(10, True)
         now = int(time())
 
         for match in matches:
