@@ -76,22 +76,24 @@ def update_ballista_entry(connection: sqlite3.Connection, match: dict, notificat
     return success
 
 
-def get_old_reminders(connection: sqlite3.Connection) -> list:
+def get_old_messages(connection: sqlite3.Connection) -> list:
     cursor = None
-    reminders = []
-    cutoff_time = int(time())
+    messages = []
+    cutoff_time = int(time() + 3600)
     try:
         cursor = connection.cursor()
         cursor.row_factory = notification_factory
         cursor.execute(
             '''
-            SELECT recruitment_post, reminder FROM ballista_report WHERE actual_end BETWEEN 1 AND ? AND reminder > 0
+            SELECT recruitment_post, reminder FROM ballista_report WHERE actual_end BETWEEN 1 AND ? 
+            AND (reminder > 0 OR recruitment_post > 0)
             ''', (cutoff_time,)
         )
-        reminders = cursor.fetchall()
+        messages = cursor.fetchall()
         cursor.execute(
             '''
-            UPDATE ballista_report SET reminder = -1 WHERE actual_end BETWEEN 1 AND ? AND reminder > 0
+            UPDATE ballista_report SET reminder = -1, recruitment_post = -1 WHERE actual_end BETWEEN 1 AND ? 
+            AND (reminder > 0 OR recruitment_post > 0)
             ''', (cutoff_time,)
         )
     finally:
@@ -99,4 +101,4 @@ def get_old_reminders(connection: sqlite3.Connection) -> list:
             connection.commit()
             cursor.close()
 
-    return reminders
+    return messages

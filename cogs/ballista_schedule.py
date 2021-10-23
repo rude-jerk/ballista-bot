@@ -68,10 +68,14 @@ class BallistaSchedule(commands.Cog):
 
     @tasks.loop(minutes=18)
     async def reminder_cleanup(self):
-        reminders = get_old_reminders(self.bot.conn)
-        for reminder in reminders:
-            reminder_message = await self.bot.schedule_channel.fetch_message(reminder.reminder)
-            await reminder_message.delete()
+        messages = get_old_messages(self.bot.conn)
+        for message in messages:
+            if message.reminder > 0:
+                reminder = await self.bot.schedule_channel.fetch_message(message.reminder)
+                await reminder.delete()
+            if message.recruitment_post > 0:
+                recruitment_post = await self.bot.schedule_channel.fetch_message(message.recruitment_post)
+                await recruitment_post.delete()
 
     @commands.Cog.listener()
     async def on_ready(self):
