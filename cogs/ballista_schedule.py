@@ -49,7 +49,7 @@ class BallistaSchedule(commands.Cog):
             if match['entryStart'] <= now + 1800:
                 notification = get_ballista_entry(self.bot.conn, match)
                 if notification.reminder == 0:
-                    sent_notification = notification._replace(reminder=1)
+                    sent_notification = notification._replace(reminder=-1)
                     notification_message = await self.bot.schedule_channel.fetch_message(notification.recruitment_post)
                     users = set()
                     for reaction in notification_message.reactions:
