@@ -71,11 +71,17 @@ class BallistaSchedule(commands.Cog):
         messages = get_old_messages(self.bot.conn)
         for message in messages:
             if message.reminder > 0:
-                reminder = await self.bot.schedule_channel.fetch_message(message.reminder)
-                await reminder.delete()
+                try:
+                    reminder = await self.bot.schedule_channel.fetch_message(message.reminder)
+                    await reminder.delete()
+                except:
+                    pass
             if message.recruitment_post > 0:
-                recruitment_post = await self.bot.schedule_channel.fetch_message(message.recruitment_post)
-                await recruitment_post.delete()
+                try:
+                    recruitment_post = await self.bot.schedule_channel.fetch_message(message.recruitment_post)
+                    await recruitment_post.delete()
+                except:
+                    pass
 
     @commands.Cog.listener()
     async def on_ready(self):
