@@ -4,7 +4,7 @@ from cachetools import TTLCache
 
 cache = TTLCache(maxsize=5, ttl=120)
 
-questions = ['is the server down', ['is', 'server', 'down'], ['is', 'server', 'dead']]
+questions = ['is the server down', ['is', 'server', 'down'], ['is', 'server', 'dead'], ['is', 'eden', 'down']]
 
 
 async def reply_to_message(message: nextcord.Message):
