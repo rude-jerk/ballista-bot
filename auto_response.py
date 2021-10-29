@@ -2,16 +2,35 @@ import nextcord
 import requests
 from cachetools import TTLCache
 
-cache = TTLCache(maxsize=5, ttl=300)
+cache = TTLCache(maxsize=5, ttl=120)
+
+questions = ['is the server down', ['is', 'server', 'down'], ['is', 'server', 'dead']]
 
 
 async def reply_to_message(message: nextcord.Message):
-    if 'is the server down' in message.content.lower():
+    if contains_server_down_question(message.content):
         online_players = fetch_online()
         if online_players > 0:
             await message.reply(f'According to edenxi.com there are {online_players} players online.')
     else:
         return
+
+
+def contains_server_down_question(message: str):
+    message = message.lower()
+    for question in questions:
+        if isinstance(question, str):
+            if question in message:
+                return True
+        if isinstance(question, list):
+            all_in = True
+            for word in question:
+                if word not in message:
+                    all_in = False
+            if all_in:
+                return True
+    return False
+
 
 
 def fetch_online():

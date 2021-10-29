@@ -49,5 +49,5 @@ if __name__ == '__main__':
         conn = initialize_db()
         conn.close()
 
-    bot.load_extension('cogs.ballista_schedule')
+    # bot.load_extension('cogs.ballista_schedule')
     bot.run(config['TOKEN'])
