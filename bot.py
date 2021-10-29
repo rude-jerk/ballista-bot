@@ -3,6 +3,7 @@ from os.path import exists, dirname, join
 
 from nextcord.ext import commands
 
+import auto_response
 from configuration import config
 
 bot = commands.Bot(description='Ballista Bot!', command_prefix='!', case_insensitive=True, self_bot=False)
@@ -37,6 +38,7 @@ async def on_ready():
 @bot.event
 async def on_message(message):
     try:
+        await auto_response.reply_to_message(message)
         await bot.process_commands(message)
     except:
         pass
