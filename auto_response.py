@@ -9,7 +9,7 @@ ignoreList = [218477886871437313, 343953414335496195]
 
 
 async def reply_to_message(message: nextcord.Message):
-    if contains_server_down_question(message.content):
+    if contains_server_down_question(message.content) and message.author.id not in ignoreList:
         online_players = fetch_online()
         if online_players > 0:
             await message.reply(f'According to edenxi.com there are {online_players} players online.')
