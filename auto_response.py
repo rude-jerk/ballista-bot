@@ -5,6 +5,7 @@ from cachetools import TTLCache
 cache = TTLCache(maxsize=5, ttl=120)
 
 questions = ['is the server down', ['is', 'server', 'down'], ['is', 'server', 'dead'], ['is', 'eden', 'down']]
+ignoreList = [218477886871437313, 343953414335496195]
 
 
 async def reply_to_message(message: nextcord.Message):
@@ -30,7 +31,6 @@ def contains_server_down_question(message: str):
             if all_in:
                 return True
     return False
-
 
 
 def fetch_online():
