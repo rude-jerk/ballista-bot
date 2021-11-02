@@ -18,7 +18,7 @@ async def reply_to_message(message: nextcord.Message):
 
 
 def contains_server_down_question(message: str):
-    message = message.lower()
+    message = message.lower().split(' ')
     for question in questions:
         if isinstance(question, str):
             if question in message:
