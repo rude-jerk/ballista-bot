@@ -6,7 +6,7 @@ cache = TTLCache(maxsize=5, ttl=120)
 reply_cache = TTLCache(maxsize=20, ttl=120)
 
 questions = ['is the server down', ['is', 'server', 'down'], ['is', 'server', 'dead'], ['is', 'eden', 'down']]
-ignoreList = [218477886871437313, 343953414335496195]
+ignoreList = [218477886871437313, 343953414335496195, 301558021098569729]
 
 
 async def reply_to_message(message: nextcord.Message):
