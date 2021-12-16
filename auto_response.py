@@ -3,15 +3,18 @@ import requests
 from cachetools import TTLCache
 
 cache = TTLCache(maxsize=5, ttl=120)
+reply_cache = TTLCache(maxsize=20, ttl=120)
 
 questions = ['is the server down', ['is', 'server', 'down'], ['is', 'server', 'dead'], ['is', 'eden', 'down']]
 ignoreList = [218477886871437313, 343953414335496195]
 
 
 async def reply_to_message(message: nextcord.Message):
-    if contains_server_down_question(message.content) and message.author.id not in ignoreList:
+    if contains_server_down_question(message.content) and message.author.id not in ignoreList \
+            and not is_recent_reply(message.author.id):
         online_players = fetch_online()
         if online_players > 0:
+            reply_cache[message.author.id] = 1
             await message.reply(f'According to edenxi.com there are {online_players} players online.')
     else:
         return
@@ -47,3 +50,12 @@ def fetch_online():
                 return 0
         except:
             return 0
+
+
+def is_recent_reply(author_id):
+    try:
+        if reply_cache[author_id] == 1:
+            return True
+    except:
+        pass
+    return False
