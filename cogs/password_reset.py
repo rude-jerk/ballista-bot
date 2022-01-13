@@ -1,4 +1,5 @@
 import asyncio
+from distutils.util import strtobool
 
 import nextcord as discord
 from nextcord.ext import commands
@@ -17,9 +18,14 @@ class PasswordReset(commands.Cog):
                 'Please PM Juul or Rude for a password reset.')
             return
         await context.send('Hello! I will ask a few questions. Each question must be answered in a single message. '
+                           'You can reply as if we were chatting, no leading "!" is necessary! '
                            'I will wait for one minute for a response after a question is asked. '
                            'If you do not have an answer, please say "I don\'t know".')
         try:
+            await context.send('Please supply the username on the account:')
+            user_name = await self.bot.wait_for('message', timeout=60,
+                                                check=lambda message: message.author == context.author)
+
             await context.send('Please supply the names of any characters on the account:')
             character_names = await self.bot.wait_for('message', timeout=60,
                                                       check=lambda message: message.author == context.author)
@@ -28,11 +34,22 @@ class PasswordReset(commands.Cog):
             email_address = await self.bot.wait_for('message', timeout=60,
                                                     check=lambda message: message.author == context.author)
 
-            await context.send('Please supply the username on the account:')
-            user_name = await self.bot.wait_for('message', timeout=60,
-                                                check=lambda message: message.author == context.author)
+            request = discord.Embed(title=f'{context.author.name}#{context.author.discriminator} '
+                                        f'requests a password reset.')
+            request.add_field(name='Username', value=user_name)
+            request.add_field(name="Character Names", value=character_names)
+            request.add_field(name="Email Address", value=email_address)
+            await context.send(embed=request)
+            await context.send('Would you like to submit this reset request?')
+            confirm_submit = await self.bot.wait_for('message', timeout=60,
+                                                     check=lambda message: message.author == context.author)
+            if strtobool(confirm_submit):
+                await context.send('Password reset request submitted! '
+                                   'Please be patient, as these are handled by real people and can take a few days. '
+                                   'You may receive a PM from a staff member to check your email to confirm.')
+
         except asyncio.TimeoutError:
-            await context.send('Password reset request canceled.')
+            await context.send('Response timeout. Password reset request canceled.')
             return
 
 
