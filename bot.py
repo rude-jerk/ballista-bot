@@ -53,7 +53,7 @@ async def on_message(message):
         await bot.process_commands(message)
         if bot.user.mentioned_in(message) and bot.ping_response_time < time() and not message.author.bot:
             await message.channel.send(random.choice(ping_responses))
-            bot.ping_response_time = time() + random.randint(120, 600)
+            bot.ping_response_time = time() + random.randint(120, 1200)
     except:
         pass
 
