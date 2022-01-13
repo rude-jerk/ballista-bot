@@ -51,7 +51,7 @@ async def on_message(message):
     try:
         await auto_response.reply_to_message(message)
         await bot.process_commands(message)
-        if bot.user.mentioned_in(message) and bot.last_ping_response < time() - 120:
+        if bot.user.mentioned_in(message) and bot.last_ping_response < time() - 120 and not message.author.bot:
             await message.channel.send(random.choice(ping_responses))
             bot.last_ping_response = time()
     except:
