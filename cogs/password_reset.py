@@ -1,4 +1,5 @@
 import asyncio
+import re
 from distutils.util import strtobool
 
 import nextcord as discord
@@ -20,7 +21,9 @@ class PasswordReset(commands.Cog):
         await context.send('Hello! I will ask a few questions. Each question must be answered in a single message. '
                            'You can reply as if we were chatting, no leading "!" is necessary! '
                            'I will wait for one minute for a response after a question is asked. '
-                           'If you do not have an answer, please say "I don\'t know".')
+                           'If you do not have an answer, please say "I don\'t know".\n'
+                           'Your information will be sent to one of our administrators to process a password reset. '
+                           'This can be quick, but please give them 48 hours to respond before following up.')
         try:
             await context.send('Please supply the username on the account:')
             response = await self.bot.wait_for('message', timeout=60,
@@ -37,11 +40,21 @@ class PasswordReset(commands.Cog):
                                                check=lambda message: message.author == context.author)
             email = response.content.strip()
 
+            creation = None
+            if not re.fullmatch(r'[^@]+@[^@]+\.[^@]+', email):
+                await context.send('If you cannot supply a valid email address, '
+                                   'please try your best to ballpark your account creation date:')
+                response = await self.bot.wait_for('message', timeout=60,
+                                                   check=lambda message: message.author == context.author)
+                creation = response.content.strip()
+
             request = discord.Embed(title=f'Password reset request from: '
                                           f'{context.author.name}#{context.author.discriminator} ')
             request.add_field(name='Username', value=user_name)
             request.add_field(name="Character Names", value=characters)
             request.add_field(name="Email Address", value=email)
+            if creation:
+                request.add_field(name="Creation Date", value=creation)
             await context.send(embed=request)
             await context.send('Would you like to submit this reset request?')
             response = await self.bot.wait_for('message', timeout=60,
