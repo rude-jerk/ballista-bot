@@ -1,3 +1,5 @@
+import asyncio
+
 import nextcord as discord
 from nextcord.ext import commands
 
@@ -17,25 +19,19 @@ class PasswordReset(commands.Cog):
         await context.send('Hello! I will ask a few questions. Each question must be answered in a single message. '
                            'I will wait for one minute for a response after a question is asked. '
                            'If you do not have an answer, please say "I don\'t know".')
+        try:
+            await context.send('Please supply the names of any characters on the account:')
+            character_names = await self.bot.wait_for('message', timeout=60,
+                                                      check=lambda message: message.author == context.author)
 
-        await context.send('Please supply the names of any characters on the account:')
-        character_names = await self.bot.wait_for('message', timeout=60,
-                                                  check=lambda message: message.author == context.author)
-        if not character_names:
-            await context.send('Password reset request canceled.')
-            return
+            await context.send('Please supply the email address on the account:')
+            email_address = await self.bot.wait_for('message', timeout=60,
+                                                    check=lambda message: message.author == context.author)
 
-        await context.send('Please supply the email address on the account:')
-        email_address = await self.bot.wait_for('message', timeout=60,
+            await context.send('Please supply the username on the account:')
+            user_name = await self.bot.wait_for('message', timeout=60,
                                                 check=lambda message: message.author == context.author)
-        if not email_address:
-            await context.send('Password reset request canceled.')
-            return
-
-        await context.send('Please supply the username on the account:')
-        user_name = await self.bot.wait_for('message', timeout=60,
-                                            check=lambda message: message.author == context.author)
-        if not user_name:
+        except asyncio.TimeoutError:
             await context.send('Password reset request canceled.')
             return
 
