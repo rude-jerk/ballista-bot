@@ -18,7 +18,7 @@ class PasswordReset(commands.Cog):
                 'Sorry, the password reset function has been suspended at this time. '
                 'Please PM Juul or Rude for a password reset.')
             return
-        await context.send('Hello! I will ask a few questions. Each question must be answered in a single message. '
+        await context.send('🤖 Hello! I will ask a few questions. Each question must be answered in a single message. '
                            'You can reply as if we were chatting, no leading "!" is necessary! '
                            'I will wait for one minute for a response after a question is asked. '
                            'If you do not have an answer, please say "I don\'t know".\n'
