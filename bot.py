@@ -1,5 +1,6 @@
 import random
 import sqlite3
+from time import time
 from os.path import exists, dirname, join
 
 from nextcord.ext import commands
@@ -9,6 +10,7 @@ from configuration import config
 
 bot = commands.Bot(description='Ballista Bot!', command_prefix='!', case_insensitive=True, self_bot=False)
 dir = dirname(__file__)
+bot.last_ping_response = 1
 ping_responses = ['ヾ(･ω･*)ﾉ', 'ಠಿヮಠ', '(´⊙ω⊙`)！', 'ᕦ⊙෴⊙ᕤ', '(●´⌓`●)', '( ͡ಠ ʖ̯ ͡ಠ)', '(ﾟ▽ﾟ｀*)?', '(´×ω×`)',
                   '(╯°□°）╯︵ ┻━┻', 'ლ(¯ロ¯"ლ)', '(づ ◕‿◕ )づ', '☆ﾐ(o*･ω･)ﾉ', 'ฅ(^◕ᴥ◕^)ฅ', 'U・ᴥ・U', 'σ( •̀ ω •́ σ)',
                   'ヽ(o´∀`)ﾉ♪♬', ' 	( ͠° ͟ʖ ͡°)', ' 	ʕ ᵔᴥᵔ ʔ']
@@ -44,8 +46,9 @@ async def on_message(message):
     try:
         await auto_response.reply_to_message(message)
         await bot.process_commands(message)
-        if bot.user.mentioned_in(message):
+        if bot.user.mentioned_in(message) and bot.last_ping_response < time() - 30:
             await message.channel.send(random.choice(ping_responses))
+            bot.last_ping_response = time()
     except:
         pass
 
