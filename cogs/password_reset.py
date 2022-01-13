@@ -41,7 +41,7 @@ class PasswordReset(commands.Cog):
             email = response.content.strip()
 
             creation = None
-            if not re.fullmatch(r'[^@]+@[^@]+\.[^@]+', email):
+            if not re.fullmatch(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b', email):
                 await context.send('If you cannot supply a valid email address, '
                                    'please try your best to ballpark your account creation date:')
                 response = await self.bot.wait_for('message', timeout=60,
