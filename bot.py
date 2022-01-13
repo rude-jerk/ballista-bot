@@ -60,4 +60,5 @@ if __name__ == '__main__':
         conn.close()
 
     bot.load_extension('cogs.ballista_schedule')
+    bot.load_extension('cogs.password_reset')
     bot.run(config['TOKEN'])
