@@ -1,3 +1,4 @@
+import random
 import sqlite3
 from os.path import exists, dirname, join
 
@@ -8,6 +9,9 @@ from configuration import config
 
 bot = commands.Bot(description='Ballista Bot!', command_prefix='!', case_insensitive=True, self_bot=False)
 dir = dirname(__file__)
+ping_responses = ['ヾ(･ω･*)ﾉ', 'ಠಿヮಠ', '(´⊙ω⊙`)！', 'ᕦ⊙෴⊙ᕤ', '(●´⌓`●)', '( ͡ಠ ʖ̯ ͡ಠ)', '(ﾟ▽ﾟ｀*)?', '(´×ω×`)',
+                  '(╯°□°）╯︵ ┻━┻', 'ლ(¯ロ¯"ლ)', '(づ ◕‿◕ )づ', '☆ﾐ(o*･ω･)ﾉ', 'ฅ(^◕ᴥ◕^)ฅ', 'U・ᴥ・U', 'σ( •̀ ω •́ σ)',
+                  'ヽ(o´∀`)ﾉ♪♬', ' 	( ͠° ͟ʖ ͡°)', ' 	ʕ ᵔᴥᵔ ʔ']
 
 
 def initialize_db() -> sqlite3.Connection:
@@ -40,6 +44,8 @@ async def on_message(message):
     try:
         await auto_response.reply_to_message(message)
         await bot.process_commands(message)
+        if bot.user.mentioned_in(message):
+            await message.channel.send(random.choice(ping_responses))
     except:
         pass
 
