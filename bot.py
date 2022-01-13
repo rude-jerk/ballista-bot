@@ -10,7 +10,7 @@ from configuration import config
 
 bot = commands.Bot(description='Ballista Bot!', command_prefix='!', case_insensitive=True, self_bot=False)
 dir = dirname(__file__)
-bot.last_ping_response = 1
+bot.ping_response_time = 1
 bot.allow_password_request = True
 ping_responses = ['ヾ(･ω･*)ﾉ', 'ಠಿヮಠ', '(´⊙ω⊙`)！', 'ᕦ⊙෴⊙ᕤ', '(●´⌓`●)', '( ͡ಠ ʖ̯ ͡ಠ)', '(ﾟ▽ﾟ｀*)?', '(´×ω×`)',
                   '(╯°□°）╯︵ ┻━┻', 'ლ(¯ロ¯"ლ)', '(づ ◕‿◕ )づ', '☆ﾐ(o*･ω･)ﾉ', 'ฅ(^◕ᴥ◕^)ฅ', 'U・ᴥ・U', 'σ( •̀ ω •́ σ)',
@@ -51,9 +51,9 @@ async def on_message(message):
     try:
         await auto_response.reply_to_message(message)
         await bot.process_commands(message)
-        if bot.user.mentioned_in(message) and bot.last_ping_response < time() - 120 and not message.author.bot:
+        if bot.user.mentioned_in(message) and bot.ping_response_time < time() and not message.author.bot:
             await message.channel.send(random.choice(ping_responses))
-            bot.last_ping_response = time()
+            bot.ping_response_time = time() + random.randint(120, 600)
     except:
         pass
 
