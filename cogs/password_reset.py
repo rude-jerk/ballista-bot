@@ -19,19 +19,22 @@ class PasswordReset(commands.Cog):
                            'If you do not have an answer, please say "I don\'t know".')
 
         await context.send('Please supply the names of any characters on the account:')
-        character_names = await self.bot.wait_for('message', timeout=60)
+        character_names = await self.bot.wait_for('message', timeout=60,
+                                                  check=lambda message: message.author == context.author)
         if not character_names:
             await context.send('Password reset request canceled.')
             return
 
         await context.send('Please supply the email address on the account:')
-        email_address = await self.bot.wait_for('message', timeout=60)
+        email_address = await self.bot.wait_for('message', timeout=60,
+                                                check=lambda message: message.author == context.author)
         if not email_address:
             await context.send('Password reset request canceled.')
             return
 
         await context.send('Please supply the username on the account:')
-        user_name = await self.bot.wait_for('message', timeout=60)
+        user_name = await self.bot.wait_for('message', timeout=60,
+                                            check=lambda message: message.author == context.author)
         if not user_name:
             await context.send('Password reset request canceled.')
             return
