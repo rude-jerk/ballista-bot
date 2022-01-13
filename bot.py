@@ -39,6 +39,10 @@ async def on_ready():
     if not bot.schedule_channel:
         print('ERROR: Could not locate schedule channel')
         exit()
+    bot.password_channel = bot.get_channel(config['PASSWORD_CHANNEL'])
+    if not bot.password_channel:
+        print('ERROR: Count not locate password channel')
+        exit()
     print(f'Logged in as {bot.user.name}#{bot.user.discriminator} [{bot.user.id}]')
 
 

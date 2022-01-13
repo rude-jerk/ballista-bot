@@ -65,6 +65,7 @@ class PasswordReset(commands.Cog):
                 await context.send('Password reset request submitted! '
                                    'Please be patient, as these are handled by real people and can take a few days. '
                                    'You may receive a PM from a staff member to check your email to confirm.')
+                self.bot.password_channel.send(embed=request)
             else:
                 await context.send('Password reset request canceled.')
 
