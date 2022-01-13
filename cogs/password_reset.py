@@ -23,16 +23,19 @@ class PasswordReset(commands.Cog):
                            'If you do not have an answer, please say "I don\'t know".')
         try:
             await context.send('Please supply the username on the account:')
-            user_name = await self.bot.wait_for('message', timeout=60,
-                                                check=lambda message: message.author == context.author).content.strip()
+            response = await self.bot.wait_for('message', timeout=60,
+                                                check=lambda message: message.author == context.author)
+            user_name = response.content.strip()
 
             await context.send('Please supply the names of any characters on the account:')
-            characters = await self.bot.wait_for('message', timeout=60,
-                                                 check=lambda message: message.author == context.author).content.strip()
+            response = await self.bot.wait_for('message', timeout=60,
+                                                 check=lambda message: message.author == context.author)
+            characters = response.content.strip()
 
             await context.send('Please supply the email address on the account:')
-            email = await self.bot.wait_for('message', timeout=60,
-                                            check=lambda message: message.author == context.author).content.strip()
+            response = await self.bot.wait_for('message', timeout=60,
+                                            check=lambda message: message.author == context.author)
+            email = response.content.strip()
 
             request = discord.Embed(title=f'{context.author.name}#{context.author.discriminator} '
                                         f'requests a password reset.')
@@ -41,8 +44,10 @@ class PasswordReset(commands.Cog):
             request.add_field(name="Email Address", value=email)
             await context.send(embed=request)
             await context.send('Would you like to submit this reset request?')
-            confirm = await self.bot.wait_for('message', timeout=60,
-                                              check=lambda message: message.author == context.author).content.strip()
+            response = await self.bot.wait_for('message', timeout=60,
+                                              check=lambda message: message.author == context.author)
+            confirm = response.content.strip()
+
             if strtobool(confirm):
                 await context.send('Password reset request submitted! '
                                    'Please be patient, as these are handled by real people and can take a few days. '
