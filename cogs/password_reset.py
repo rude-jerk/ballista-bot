@@ -24,34 +24,36 @@ class PasswordReset(commands.Cog):
         try:
             await context.send('Please supply the username on the account:')
             response = await self.bot.wait_for('message', timeout=60,
-                                                check=lambda message: message.author == context.author)
+                                               check=lambda message: message.author == context.author)
             user_name = response.content.strip()
 
             await context.send('Please supply the names of any characters on the account:')
             response = await self.bot.wait_for('message', timeout=60,
-                                                 check=lambda message: message.author == context.author)
+                                               check=lambda message: message.author == context.author)
             characters = response.content.strip()
 
             await context.send('Please supply the email address on the account:')
             response = await self.bot.wait_for('message', timeout=60,
-                                            check=lambda message: message.author == context.author)
+                                               check=lambda message: message.author == context.author)
             email = response.content.strip()
 
-            request = discord.Embed(title=f'{context.author.name}#{context.author.discriminator} '
-                                        f'requests a password reset.')
+            request = discord.Embed(title=f'Password reset request from: '
+                                          f'{context.author.name}#{context.author.discriminator} ')
             request.add_field(name='Username', value=user_name)
             request.add_field(name="Character Names", value=characters)
             request.add_field(name="Email Address", value=email)
             await context.send(embed=request)
             await context.send('Would you like to submit this reset request?')
             response = await self.bot.wait_for('message', timeout=60,
-                                              check=lambda message: message.author == context.author)
+                                               check=lambda message: message.author == context.author)
             confirm = response.content.strip()
 
             if strtobool(confirm):
                 await context.send('Password reset request submitted! '
                                    'Please be patient, as these are handled by real people and can take a few days. '
                                    'You may receive a PM from a staff member to check your email to confirm.')
+            else:
+                await context.send('Password reset request canceled.')
 
         except asyncio.TimeoutError:
             await context.send('Response timeout. Password reset request canceled.')
