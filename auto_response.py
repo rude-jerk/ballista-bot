@@ -1,3 +1,5 @@
+from string import punctuation
+
 import nextcord
 import requests
 from cachetools import TTLCache
@@ -21,7 +23,7 @@ async def reply_to_message(message: nextcord.Message):
 
 
 def contains_server_down_question(message: str):
-    message = message.lower()
+    message = message.translate(str.maketrans('', '', punctuation)).lower()
     for question in questions:
         if isinstance(question, str):
             if question in message:
