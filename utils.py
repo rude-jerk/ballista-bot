@@ -102,3 +102,20 @@ def get_old_messages(connection: sqlite3.Connection) -> list:
             cursor.close()
 
     return messages
+
+
+def log_reset_request(connection: sqlite3.Connection, discord_user: str, account_user: str, char_name: str, email: str,
+                      submitted: bool):
+    cursor = None
+    try:
+        cursor = connection.cursor()
+        cursor.execute(
+            '''
+            INSERT INTO reset_log (discord_user, request_time, user_name, character_name, email_address, submitted) 
+            VALUES (?, ?, ?, ?, ?, ?)
+            ''', (discord_user, time(), account_user, char_name, email, 'Y' if submitted else 'N')
+        )
+    finally:
+        if cursor:
+            connection.commit()
+            cursor.close()

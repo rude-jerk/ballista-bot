@@ -5,6 +5,8 @@ from distutils.util import strtobool
 import nextcord as discord
 from nextcord.ext import commands
 
+from utils import log_reset_request
+
 
 class PasswordReset(commands.Cog):
     def __init__(self, bot: discord.Client):
@@ -74,6 +76,9 @@ class PasswordReset(commands.Cog):
                 await self.bot.password_channel.send(embed=request)
             else:
                 await context.send('Password reset request canceled.')
+
+            log_reset_request(self.bot.conn, f'{context.author.name}#{context.author.discriminator}', user_name,
+                              characters, email, strtobool(confirm))
 
         except asyncio.TimeoutError:
             await context.send('Response timeout. Password reset request canceled.')

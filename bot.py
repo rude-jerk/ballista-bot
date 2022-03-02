@@ -28,6 +28,15 @@ def initialize_db() -> sqlite3.Connection:
                                          recruitment_post INTEGER, 
                                          reminder INTEGER, 
                                          PRIMARY KEY(entry_start, entry_end, actual_start, actual_end));''')
+    cur.execute(
+        '''CREATE TABLE reset_log (discord_user TEXT,
+                                   request_time INTEGER,
+                                   user_name TEXT,
+                                   character_name TEXT,
+                                   email_address TEXT,
+                                   submitted TEXT,
+                                   PRIMARY KEY(discord_user, request_time));'''
+    )
     cur.close()
     return conn
 
