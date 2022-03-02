@@ -54,7 +54,7 @@ class PasswordReset(commands.Cog):
 
             request = discord.Embed(title=f'Password reset request from: '
                                           f'{context.author.name}#{context.author.discriminator} ')
-            request.add_field(name="Recovery or Reset", value=recovery_or_reset)
+            request.add_field(name="Recovery or Reset", value=recovery_or_reset, inline=False)
             request.add_field(name='Username', value=user_name)
             request.add_field(name="Character Names", value=characters)
             request.add_field(name="Email Address", value=email)
@@ -67,6 +67,7 @@ class PasswordReset(commands.Cog):
             confirm = response.content.strip()
 
             if strtobool(confirm):
+                request.set_footer(text=str(context.author.id))
                 await context.send('Password reset request submitted! '
                                    'Please be patient, as these are handled by real people and can take a few days. '
                                    'You may receive a PM from a staff member to check your email to confirm.')
