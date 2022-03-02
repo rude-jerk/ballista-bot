@@ -25,6 +25,10 @@ class PasswordReset(commands.Cog):
                            'Your information will be sent to one of our administrators to process a password reset. '
                            'This can be quick, but please give them 48 hours to respond before following up.')
         try:
+            await context.send('Is this a request for an account recovery or a password reset?')
+            response = await self.bot.wait_for('message', timeout=60,
+                                               check=lambda message: message.author == context.author)
+            recovery_or_reset = response.content.strip()
             await context.send('Please supply the username on the account:')
             response = await self.bot.wait_for('message', timeout=60,
                                                check=lambda message: message.author == context.author)
@@ -50,6 +54,7 @@ class PasswordReset(commands.Cog):
 
             request = discord.Embed(title=f'Password reset request from: '
                                           f'{context.author.name}#{context.author.discriminator} ')
+            request.add_field(name="Recovery or Reset", value=recovery_or_reset)
             request.add_field(name='Username', value=user_name)
             request.add_field(name="Character Names", value=characters)
             request.add_field(name="Email Address", value=email)
